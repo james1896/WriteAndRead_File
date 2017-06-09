@@ -5,15 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.http.util.EncodingUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,28 +50,54 @@ public class MainActivity extends AppCompatActivity {
      * @return 读取到的文件内容
      */
     private String readFile() {
+//        FileInputStream inputStream;
+//        byte[] buffer = null;
+
+
+//        try {
+//            inputStream = this.openFileInput(fileName);
+//            try {
+//                // 获取文件内容长度
+//                int fileLen = inputStream.available();
+//                // 读取内容到buffer
+//                buffer = new byte[fileLen];
+//                inputStream.read(buffer);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        // 返回文本信息
+//        if (buffer != null)
+//            return EncodingUtils.getString(buffer, "utf-8");
+//        else
+//            return "没有数据";
+
         FileInputStream inputStream;
-        byte[] buffer = null;
+        int hasRead = 0;
+        byte[] buffer = new byte[1024];
+        StringBuilder sb = new StringBuilder("");
         try {
-            inputStream = this.openFileInput(fileName);
-            try {
-                // 获取文件内容长度
-                int fileLen = inputStream.available();
-                // 读取内容到buffer
-                buffer = new byte[fileLen];
-                inputStream.read(buffer);
-            } catch (IOException e) {
-                e.printStackTrace();
+            inputStream = openFileInput(fileName);
+
+            while ((hasRead = inputStream.read(buffer)) > 0){
+
+                sb.append(new String(buffer,0,hasRead));
             }
-        } catch (FileNotFoundException e) {
+             inputStream.close();
+            if(!sb.toString().equals("")){
+                return sb.toString();
+            }else {
+                return "没有数据";
+            }
+
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        // 返回文本信息
-        if (buffer != null)
-            return EncodingUtils.getString(buffer, "utf-8");
-        else
-            return "没有数据";
 
+        return "没有数据";
     }
 
 
